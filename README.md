@@ -1,14 +1,15 @@
 ---
-title: Streamlit Template Space
+title: Smoke Detection Demo
 emoji: 🚀
 colorFrom: red
 colorTo: red
 sdk: docker
 app_port: 8501
 tags:
-  - streamlit
+- streamlit
 pinned: false
-short_description: Streamlit template space
+short_description: Wildfire smoke detection demo
+license: mit
 ---
 
 # Welcome to Streamlit!
