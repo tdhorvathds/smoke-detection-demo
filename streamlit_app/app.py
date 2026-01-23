@@ -18,6 +18,9 @@ import pandas as pd
 import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 
+from utils.assets_download import ensure_demo_assets
+
+
 # ------------------------------------------------------------
 # Path setup
 # ------------------------------------------------------------
@@ -35,6 +38,8 @@ from utils.rcnn_inference import load_best_rcnn, predict_rcnn
 # Page config
 # ------------------------------------------------------------
 st.set_page_config(page_title="Wildfire Smoke Detection Demo", layout="wide")
+
+ensure_demo_assets()
 
 # ------------------------------------------------------------
 # Folder structure (EXPECTED)
