@@ -1,0 +1,13 @@
+# Core app
+streamlit>=1.31
+
+# ML / vision
+torch>=2.0
+torchvision>=0.15
+ultralytics>=8.0
+
+# Image handling
+pillow>=9.5
+
+# Utilities
+requests>=2.31
