@@ -1,0 +1,42 @@
+# =====================
+# Python
+# =====================
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.eggs/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# =====================
+# Streamlit
+# =====================
+.streamlit/
+
+# =====================
+# Model weights (NEVER COMMIT)
+# =====================
+streamlit_app/models/*.pt
+streamlit_app/models/*.pth
+
+# =====================
+# Data artifacts / caches
+# =====================
+*.pkl
+*.joblib
+*.npz
+*.npy
+*.log
+
+# =====================
+# OS / editor junk
+# =====================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
