@@ -40,3 +40,10 @@ streamlit_app/models/*.pth
 Thumbs.db
 .vscode/
 .idea/
+
+# =====================
+# Demo assets
+# =====================
+streamlit_app/assets/samples_demo/
+streamlit_app/assets/xai_demo/
+streamlit_app/assets/gt/
