@@ -16,5 +16,3 @@ pillow>=9.5
 # Utilities
 requests>=2.31
 
-
-
