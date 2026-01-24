@@ -32,10 +32,6 @@ from streamlit_app.utils.rcnn_inference import load_best_rcnn, predict_rcnn
 # ------------------------------------------------------------
 # Page config
 # ------------------------------------------------------------
-st.set_page_config(
-    page_title="Wildfire Smoke Detection Demo",
-    layout="wide",
-)
 
 st.markdown(
     """
