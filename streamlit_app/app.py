@@ -18,7 +18,7 @@ import pandas as pd
 import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 
-from utils.assets_download import ensure_demo_assets
+from streamlit_app.utils.assets_download import ensure_demo_assets
 
 
 # ------------------------------------------------------------
@@ -31,8 +31,8 @@ for p in [str(APP_DIR), str(REPO_ROOT)]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
-from utils.yolo_inference import load_best_yolo, predict_yolo
-from utils.rcnn_inference import load_best_rcnn, predict_rcnn
+from streamlit_app.utils.yolo_inference import load_best_yolo, predict_yolo
+from streamlit_app.utils.rcnn_inference import load_best_rcnn, predict_rcnn
 
 # ------------------------------------------------------------
 # Page config
