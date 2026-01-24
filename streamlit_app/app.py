@@ -23,7 +23,7 @@ for p in [str(REPO_ROOT), str(APP_DIR)]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
-# ✅ Imports AFTER sys.path fix
+
 from streamlit_app.utils.assets_download import ensure_demo_assets
 from streamlit_app.utils.yolo_inference import load_best_yolo, predict_yolo
 from streamlit_app.utils.rcnn_inference import load_best_rcnn, predict_rcnn
@@ -349,8 +349,6 @@ def main():
         "YOLO is shown on **clean + noise**, Faster R-CNN on **clean + fog**."
     )
 
-    st.warning("DEBUG: full-width test marker (dev) 2026-01-24")
-
 
     # Load curated samples
     samples_by_arch = load_samples_by_arch(SAMPLES_ROOT)
@@ -466,13 +464,13 @@ def main():
                         st.exception(e)
 
     # =========================
-    # Explain tab (precomputed overlays)
+    # Explain tab
     # =========================
     with tab_explain:
         st.subheader("Explain")
         st.caption("Shows precomputed Grad-CAM++ / D-RISE overlays. No live XAI computation.")
 
-        col_l, col_r = st.columns([1, 1], gap="large")
+        col_l, col_r = st.columns([1, 3], gap="large")
 
         with col_l:
             model_label = st.radio(
