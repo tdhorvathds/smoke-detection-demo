@@ -1,3 +1,14 @@
+---
+title: Wildfire Smoke Detection Demo
+emoji: 🔥
+colorFrom: gray
+colorTo: red
+sdk: streamlit
+python_version: "3.11"
+app_file: app.py
+pinned: false
+---
+
 # Wildfire Smoke Detection Demo  
 **YOLOv11s vs Faster R-CNN | Streamlit**
 
