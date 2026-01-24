@@ -1,12 +1,6 @@
 """
 Streamlit demo: Wildfire Smoke Detection (YOLOv11s vs Faster R-CNN)
 
-Bugfixes + improvements (no behavioral changes to your model utils):
-1) FIX: do NOT `return` early from the Detect tab (it killed the whole app / Explain tab).
-2) FIX: make overlay lookup consistent: pass scene_key (stem) and try common extensions.
-3) ADD: robust asset diagnostics expander (shows what is missing/mismatched).
-4) ADD: optional "strict pairing" already enforced in load_samples_by_arch (clean only if counterpart exists).
-5) ADD: clearer folder expectations (aligns with code).
 """
 
 import sys
@@ -18,26 +12,55 @@ import pandas as pd
 import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 
-from streamlit_app.utils.assets_download import ensure_demo_assets
-
-
 # ------------------------------------------------------------
 # Path setup
 # ------------------------------------------------------------
-APP_DIR = Path(__file__).resolve().parent              # .../streamlit_app
-REPO_ROOT = APP_DIR.parent                             # .../XAI-wildfire-smoke-detection
 
-for p in [str(APP_DIR), str(REPO_ROOT)]:
+APP_DIR = Path(__file__).resolve().parent
+REPO_ROOT = APP_DIR.parent
+
+for p in [str(REPO_ROOT), str(APP_DIR)]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
+# ✅ Imports AFTER sys.path fix
+from streamlit_app.utils.assets_download import ensure_demo_assets
 from streamlit_app.utils.yolo_inference import load_best_yolo, predict_yolo
 from streamlit_app.utils.rcnn_inference import load_best_rcnn, predict_rcnn
+
 
 # ------------------------------------------------------------
 # Page config
 # ------------------------------------------------------------
-st.set_page_config(page_title="Wildfire Smoke Detection Demo", layout="wide")
+st.set_page_config(
+    page_title="Wildfire Smoke Detection Demo",
+    layout="wide",
+)
+
+st.markdown(
+    """
+    <style>
+      /* Streamlit wide layout still applies a max-width in some builds/embeds.
+         Force all relevant containers to 100%. */
+      .block-container {
+        max-width: 100% !important;
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
+      section.main > div {
+        max-width: 100% !important;
+      }
+      div[data-testid="stAppViewContainer"] {
+        max-width: 100% !important;
+      }
+      div[data-testid="stMainBlockContainer"] {
+        max-width: 100% !important;
+      }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 
 ensure_demo_assets()
 
@@ -326,6 +349,9 @@ def main():
         "YOLO is shown on **clean + noise**, Faster R-CNN on **clean + fog**."
     )
 
+    st.warning("DEBUG: full-width test marker (dev) 2026-01-24")
+
+
     # Load curated samples
     samples_by_arch = load_samples_by_arch(SAMPLES_ROOT)
 
@@ -338,7 +364,7 @@ def main():
     # Detect tab
     # =========================
     with tab_detect:
-        col_left, col_right = st.columns([1, 1], gap="large")
+        col_left, col_right = st.columns([1, 3], gap="large")
 
         with col_left:
             st.subheader("Input")
@@ -384,6 +410,7 @@ def main():
 
             run = st.button("Run detection", type="primary", use_container_width=True)
 
+
             with st.expander("Notes"):
                 st.write("- Sample list is architecture-specific and only shows **clean scenes that have the required corrupted counterpart**.")
                 st.write("- GT boxes are only available for sample images if you provide a COCO JSON in assets/gt/.")
@@ -427,6 +454,7 @@ def main():
 
                         st.image(out_img, caption=f"{model_label} • {variant}", use_container_width=True)
 
+
                         if boxes:
                             st.markdown("Detections")
                             st.dataframe(detections_to_df(boxes), use_container_width=True, hide_index=True)
@@ -466,14 +494,14 @@ def main():
             expl_samples = samples_by_arch.get(model_key, {})
             if not expl_samples:
                 st.warning(f"No curated paired samples found for {model_key.upper()} under: {SAMPLES_ROOT}")
-                return
+                st.stop()
 
             chosen_key = st.selectbox("Choose scene", sorted(expl_samples.keys()), key="expl_key")
 
             variants = [v for v in (["clean", "noise"] if model_key == "yolo" else ["clean", "fog"]) if v in expl_samples[chosen_key]]
             if not variants:
                 st.warning("No matching variants for this scene in your samples folder.")
-                return
+                st.stop()
 
             variant = st.radio("Variant", variants, horizontal=True, key="expl_variant")
 
@@ -505,7 +533,7 @@ def main():
                     f"- {XAI_ROOT / model_key / method / variant / (chosen_key + '.png')}"
                 )
                 st.image(base_img, caption="Base image", use_container_width=True)
-                return
+                st.stop()
 
             overlay_img = Image.open(overlay_path).convert("RGB")
 
