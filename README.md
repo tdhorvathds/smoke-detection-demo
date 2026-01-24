@@ -22,8 +22,7 @@ The application is designed as a **lightweight, browser-based demo** that allows
 ---
 
 ## Live demo
-**Streamlit app:** 
-Runs fully in the browser. No installation required for users.
+**Streamlit app:** https://huggingface.co/spaces/tdhorvath/smoke-detection-demo
 
 ---
 
@@ -45,8 +44,8 @@ This mirrors real-world ML engineering workflows more closely than a training-on
 ### Detect
 Run live inference on:
 - **Curated in-domain samples** with paired corruptions  
-  - YOLO: *clean + noise*  
-  - Faster R-CNN: *clean + fog*  
+  - YOLO: *clean + synthetic noise*  
+  - Faster R-CNN: *clean + synthetic fog*  
 - **User-uploaded images** (PNG / JPG)
 
 Key controls:
