@@ -465,7 +465,7 @@ def main():
                         img_slot.image(
                             out_img,
                             caption=f"{model_label} • {variant}",
-                            width=1200,
+                            width=900,
                         )
 
                         # Table output
