@@ -552,7 +552,7 @@ def main():
                     "No overlay found for this selection.\n\nExpected, for example:\n"
                     f"- {XAI_ROOT / model_key / method / variant / (chosen_key + '.png')}"
                 )
-                st.image(base_img, caption="Base image", use_container_width=True)
+                st.image(base_img, caption="Base image", width=900)
                 st.stop()
 
             overlay_img = Image.open(overlay_path).convert("RGB")
@@ -601,14 +601,14 @@ def main():
             st.image(
                 disp,
                 caption=f"{MODEL_DISPLAY_NAME[model_key]} • {METHOD_DISPLAY_NAME[method]} • {variant}",
-                use_container_width=True,
+                width=900,
             )
 
             if expl_boxes:
                 st.markdown("**Predicted boxes**")
                 st.dataframe(
                     detections_to_df(expl_boxes),
-                    use_container_width=True,
+                    use_container_width=False,
                     hide_index=True,
                     height=320
                 )
