@@ -36,8 +36,12 @@ from streamlit_app.utils.rcnn_inference import load_best_rcnn, predict_rcnn
 st.markdown(
     """
     <style>
-      /* Streamlit wide layout still applies a max-width in some builds/embeds.
-         Force all relevant containers to 100%. */
+      /* Always reserve vertical scrollbar space to prevent layout shift */
+      html, body {
+        overflow-y: scroll;
+      }
+
+      /* Your existing wide-layout overrides */
       .block-container {
         max-width: 100% !important;
         padding-left: 2rem;
@@ -414,11 +418,21 @@ def main():
         with col_right:
             st.subheader("Output")
 
+            # Stable placeholders (prevent layout collapse/expand on reruns)
+            msg_slot = st.empty()
+            img_slot = st.empty()
+            table_slot = st.empty()
+
+            # Clear everything by default on each rerun
+            msg_slot.empty()
+            img_slot.empty()
+            table_slot.empty()
+
             if not run:
-                st.info("Choose an image and click **Run detection**.")
+                msg_slot.info("Choose an image and click **Run detection**.")
             else:
                 if img is None:
-                    st.warning("No image selected/uploaded.")
+                    msg_slot.warning("No image selected/uploaded.")
                 else:
                     try:
                         with st.spinner("Running inference..."):
@@ -439,25 +453,38 @@ def main():
                         if show_gt and source == "Sample" and chosen_key and chosen_key in gt_map:
                             out_img = draw_gt_boxes(out_img, gt_map[chosen_key], color="lime")
                         elif show_gt and source == "Sample" and chosen_key and (chosen_key not in gt_map):
-                            st.caption("GT boxes requested, but none found for this image in the provided COCO JSON.")
+                            msg_slot.caption("GT boxes requested, but none found for this image in the provided COCO JSON.")
 
+                        # Draw predictions
                         if show_pred and boxes:
                             out_img = draw_pred_boxes(out_img, boxes, color="red")
 
                         render_box_legend(show_gt=show_gt, show_pred=show_pred)
 
-                        st.image(out_img, caption=f"{model_label} • {variant}", use_container_width=True)
+                        # Image output (kept stable via placeholder)
+                        img_slot.image(
+                            out_img,
+                            caption=f"{model_label} • {variant}",
+                            use_container_width=True,
+                        )
 
-
+                        # Table output (fixed height reduces HF jitter a lot)
                         if boxes:
-                            st.markdown("Detections")
-                            st.dataframe(detections_to_df(boxes), use_container_width=True, hide_index=True)
+                            df = detections_to_df(boxes)
+                            table_slot.dataframe(
+                                df,
+                                use_container_width=True,
+                                hide_index=True,
+                                height=320,
+                            )
                         else:
-                            st.info("No smoke detections above the confidence threshold.")
+                            msg_slot.info("No smoke detections above the confidence threshold.")
 
                     except Exception as e:
-                        st.error("Inference failed.")
-                        st.exception(e)
+                        msg_slot.error("Inference failed.")
+                        # keep exception under the message area; still stable structure
+                        msg_slot.exception(e)
+
 
     # =========================
     # Explain tab
@@ -584,6 +611,7 @@ def main():
                     detections_to_df(expl_boxes),
                     use_container_width=True,
                     hide_index=True,
+                    height=320
                 )
 
 
