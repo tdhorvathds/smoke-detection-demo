@@ -461,21 +461,20 @@ def main():
 
                         render_box_legend(show_gt=show_gt, show_pred=show_pred)
 
-                        # Image output (kept stable via placeholder)
+                        # Image output
                         img_slot.image(
                             out_img,
                             caption=f"{model_label} • {variant}",
-                            use_container_width=True,
+                            width=1200,
                         )
 
-                        # Table output (fixed height reduces HF jitter a lot)
+                        # Table output
                         if boxes:
                             df = detections_to_df(boxes)
                             table_slot.dataframe(
                                 df,
-                                use_container_width=True,
+                                use_container_width=False,
                                 hide_index=True,
-                                height=320,
                             )
                         else:
                             msg_slot.info("No smoke detections above the confidence threshold.")
