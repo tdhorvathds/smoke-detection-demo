@@ -610,7 +610,6 @@ def main():
                     detections_to_df(expl_boxes),
                     use_container_width=False,
                     hide_index=True,
-                    height=320
                 )
 
 
